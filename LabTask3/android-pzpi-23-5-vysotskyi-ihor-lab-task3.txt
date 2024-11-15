@@ -1,0 +1,547 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 3 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконала:                                                                                     Перевірив:
+ст. гр. ПЗПІ-23-5                        				ст. викладач кафедри ПІ
+Висоцький І. О.							Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+2024 
+ЗАВДАННЯ
+
+Розробити калькулятор на 4 базові арифметичні операції з кнопками для введення аргументів і дій.
+Калькулятор повинен мати адаптивний користувацький інтерфейс у різних орієнтаціях екрану та на екранах різної роздільної здатності.
+ 
+ХІД РОБОТИ
+
+Cтворюємо новий проєкт та обираємо Empty Views Activity.
+Спочатку зробимо розмітку для портретної та ландшафтної орієнтацій, щоб потім було простіше прив’язувати змінні до вже існуючих значень. Отже, відкриваємо файл activity_main.xml, та починаємо із кнопок для введення чисел та операцій із ними. За замовчанням було встановлено ConstraintLayout,  його буо змінено на LinearLayout. Кнопки однотипні, знаходяться у GridLayout один за одним:
+1.	<Viewandroid:id="@+id/colorPanel"
+2.	android:layout_width="match_parent"
+3.	android:layout_height="0dp"
+4.	android:layout_weight="2"
+5.	android:background="#000000"/>
+Я використовувала для виведення елемент View. 
+Далі кнопки із цифрами та діями однотипні, прив’язані до стилю, відрізняються вони тільки текстом та id, наприклад:
+1.	<Button android:id="@+id/btn1" 
+2.	android:text="1" 
+3.	style="@style/CalcButton" />
+
+Стиль CalcButton:
+1.	<resources> 
+2.	<style name="CalcButton">
+3.	 <item name="android:layout_width">80dp</item> 
+4.	<item name="android:layout_margin">1dp</item>
+5.	 <item name="android:layout_height">wrap_content</item>
+6.	 <item name="android:layout_weight">1</item> 
+7.	<item name="android:background">#040404</item>
+8.	 <item name="android:textSize">24sp</item> 
+9.	</style> 
+10.	</resources>
+
+Повністю код портретної орієнтації можна побачити у ДОДАТКУ А.
+Аналогічно створено розмітку для ландшафтної орієнтації. Єдина різниця у розташуванні кнопок, у ландшафтному положенні 5 кнопок знаходять в кінці GridLayout це було зроблено за допомогою android:layout_gravity="end".
+Повністю код ландшафтної орієнтації можна побачити у ДОДАТКУ Б.
+
+Переходимо до функціональної частини. Першим кроком визначаємо кожну кнопку, на прикладі кнопки введення одиниці:
+1. findViewById(R.id.btn0).setOnClickListener(this::onNumberClick);
+
+Створюємо змінні для збереження першого числа, другого числа, оператора та стану оператора. 
+Код кожної з кнопок можно побачити у ДОДАТОКУ В.
+Приклад метод для кнопки запису числа у TextView:
+1.	private void onNumberClick(View view) { 
+2.	Button button = (Button) view; 
+3.	String number = button.getText().toString(); 
+4.	if (isOperatorClicked) { 
+5.	resultTextView.setText("");
+6.	 isOperatorClicked = false; 
+7.	}
+
+
+Випадок «дорівнює» має у собі підрахунки. Спочатку він записує друге число та знову починає switch-case для перевірки записаного оператора. В його залежності виконується дія в операторі. Приклад випадку додавання:
+1.	private void onEqualsClick() 
+2.	{
+3.	 secondNumber = Double.parseDouble(resultTextView.getText().toString()); 
+4.	double result = 0; 
+5.	switch (operator) { 
+6.	case "+": 
+7.	result = firstNumber + secondNumber; 
+8.	break;
+9.	 case "-": 
+10.	result = firstNumber - secondNumber; 
+11.	break; 
+12.	case "*": 
+13.	result = firstNumber * secondNumber; 
+14.	break; 
+15.	case "/": result = secondNumber != 0 ? firstNumber / secondNumber : 0; 
+16.	break; 
+17.	default:
+18.	 result = Double.parseDouble(resultTextView.getText().toString()); 
+19.	break; 
+20.	}
+
+Всі змінні зберігаються та відновлюються у Bundle за допомогою методів onSaveInstanceState та onRestoreInstanceState.
+ 
+ВИСНОВКИ
+
+Під час лабораторної роботи було створено додаток простого калькулятора на 4 базові дії, закріплено знання з обробки подій при використанні кнопок, обчислення записаних з кнопок змінних та відображення результату на екрані.
+Відеозвіт на YouTube. URL: https://www.youtube.com/watch?v=SRo1TZcnWUg 
+
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Документація JavaRush switch-case. URL: https://javarush.com/en/groups/posts/en..switch-statement-in-java  (дата звернення: 26.10.2024)
+2.	Документація JavaRush replacing strings in java. URL: https://javarush.com/en/groups/posts/en.2845.replace-string-in-java (дата звернення: 26.10.2024)
+ 
+ДОДАТОК А
+
+Файл портретної орієнтації.
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <!-- Екран відображення результату -->
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="16dp"
+        android:text="0"
+        android:textSize="32sp"
+        android:background="#EFEFEF"
+        android:textColor="#000000" />
+
+    <!-- Сітка кнопок -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:rowCount="5"
+        android:columnCount="4"
+        android:padding="16dp">
+
+        <!-- Кнопки з числами -->
+        <Button
+        android:id="@+id/btn1"
+        android:text="1"
+        style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:text="2"
+            style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:text="3"
+            style="@style/CalcButton" />
+
+
+        <Button
+            android:id="@+id/btnClear"
+            android:text="C"
+            style="@style/CalcButton"/>
+
+
+        <Button
+        android:id="@+id/btn4"
+        android:text="4"
+        style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btn5"
+            android:text="5"
+            style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btn6"
+            android:text="6"
+            style="@style/CalcButton" />
+        <Button
+        android:id="@+id/btnEquals"
+        android:text="="
+        style="@style/CalcButton"
+        />
+        <Button
+            android:id="@+id/btn7"
+            android:text="7"
+            style="@style/CalcButton" />
+
+
+
+        <Button
+            android:id="@+id/btn8"
+            android:text="8"
+            style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btn9"
+            android:text="9"
+            style="@style/CalcButton" />
+
+        <Button
+            android:id="@+id/btnDivide"
+            android:text="/"
+            style="@style/CalcButton" />
+
+
+
+        <Button
+            android:id="@+id/btnMultiply"
+            android:text="*"
+            style="@style/CalcButton" />
+
+
+        <Button
+            android:id="@+id/btn0"
+            android:text="0"
+            style="@style/CalcButton" />
+        <Button
+            android:id="@+id/btnSubtract"
+            android:text="-"
+            style="@style/CalcButton" />
+
+
+
+        <Button
+            android:id="@+id/btnDot"
+            android:text="."
+            style="@style/CalcButton" />
+
+
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_column="3"
+            android:text="+"
+            style="@style/CalcButton" />
+
+    </GridLayout>
+</LinearLayout>
+ 
+ДОДАТОК Б
+
+Файл ландшафтної розмітки
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- Екран відображення результату -->
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EFEFEF"
+        android:gravity="end"
+        android:padding="16dp"
+        android:text="0"
+        android:textColor="#000000"
+        android:textSize="32sp" />
+
+    <!-- Сітка кнопок -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:columnCount="4"
+        android:paddingStart="100dp"
+        android:paddingRight="20dp"
+        android:rowCount="5">
+
+        <!-- Кнопки з числами -->
+        <Button
+            android:id="@+id/btn1"
+            style="@style/CalcButton"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/btn2"
+            style="@style/CalcButton"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/btn3"
+            style="@style/CalcButton"
+            android:text="3" />
+
+
+        <Button
+            android:id="@+id/btnClear"
+            style="@style/CalcButton"
+            android:layout_gravity="end"
+            android:text="C" />
+
+
+        <Button
+            android:id="@+id/btn4"
+            style="@style/CalcButton"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/btn5"
+            style="@style/CalcButton"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/btn6"
+            style="@style/CalcButton"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/btnMultiply"
+            style="@style/CalcButton"
+            android:layout_gravity="end"
+            android:text="*" />
+
+        <Button
+            android:id="@+id/btn7"
+            style="@style/CalcButton"
+            android:text="7" />
+
+
+        <Button
+            android:id="@+id/btn8"
+            style="@style/CalcButton"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/btn9"
+            style="@style/CalcButton"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/btnDivide"
+            style="@style/CalcButton"
+            android:layout_gravity="end"
+            android:text="/" />
+
+        <Button
+            android:id="@+id/btnDot"
+            style="@style/CalcButton"
+            android:text="." />
+
+
+        <Button
+            android:id="@+id/btn0"
+            style="@style/CalcButton"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/btnEquals"
+            style="@style/CalcButton"
+            android:text="=" />
+
+        <Button
+            android:id="@+id/btnSubtract"
+            style="@style/CalcButton"
+            android:layout_gravity="end"
+            android:text="-" />
+
+
+        <Button
+            android:id="@+id/btnAdd"
+            style="@style/CalcButton"
+            android:layout_column="3"
+            android:layout_gravity="end"
+            android:text="+" />
+
+    </GridLayout>
+</LinearLayout>
+ 
+ДОДАТОК В
+
+Файл функціональної частини MainActivity
+
+package ihor.vysotskyi.nure;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView resultTextView;
+    private double firstNumber = 0;
+    private double secondNumber = 0;
+    private String operator = "";
+    private boolean isOperatorClicked = false;
+    //private boolean checker = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        resultTextView = findViewById(R.id.result);
+
+
+        if (savedInstanceState != null) {
+            String restoredText = savedInstanceState.getString("RESULT_TEXT", "");
+            resultTextView.setText(restoredText);
+        }
+        // Встановлюємо слухачів на кнопки
+        setButtonListeners();
+    }
+
+    private void setButtonListeners() {
+        findViewById(R.id.btn0).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn1).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn2).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn3).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn4).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn5).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn6).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn7).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn8).setOnClickListener(this::onNumberClick);
+        findViewById(R.id.btn9).setOnClickListener(this::onNumberClick);
+        // Додайте слухачі для всіх числових кнопок та дій
+        findViewById(R.id.btnAdd).setOnClickListener(v -> onOperatorClick("+"));
+        findViewById(R.id.btnSubtract).setOnClickListener(v -> onOperatorClick("-"));
+        findViewById(R.id.btnMultiply).setOnClickListener(v -> onOperatorClick("*"));
+        findViewById(R.id.btnDivide).setOnClickListener(v -> onOperatorClick("/"));
+        findViewById(R.id.btnEquals).setOnClickListener(v -> onEqualsClick());
+        findViewById(R.id.btnDot).setOnClickListener(v -> onDotClick());
+        // Додаємо обробку кнопки очищення
+        findViewById(R.id.btnClear).setOnClickListener(v -> onClearClick());
+    }
+
+    private void onNumberClick(View view) {
+        Button button = (Button) view;
+        String number = button.getText().toString();
+
+        if (isOperatorClicked) {
+            resultTextView.setText("");
+            isOperatorClicked = false;
+            //checker = true;
+        }
+
+        String text = resultTextView.getText().toString();
+        if (text.equals("0")) {
+            resultTextView.setText(number);
+        } else {
+            resultTextView.append(number);
+        }
+
+    }
+
+    private void onOperatorClick(String operator) {
+        //if (!checker){
+        firstNumber = Double.parseDouble(resultTextView.getText().toString());
+        this.operator = operator;
+        isOperatorClicked = true;
+/*       }else{
+           onEqualsClick();
+       }
+        checker = false;*/
+    }
+
+    private void onEqualsClick() {
+        secondNumber = Double.parseDouble(resultTextView.getText().toString());
+
+        double result = 0;
+        switch (operator) {
+            case "+":
+                result = firstNumber + secondNumber;
+                break;
+            case "-":
+                result = firstNumber - secondNumber;
+                break;
+            case "*":
+                result = firstNumber * secondNumber;
+                break;
+            case "/":
+                result = secondNumber != 0 ? firstNumber / secondNumber : 0;
+                break;
+            default:
+                result = Double.parseDouble(resultTextView.getText().toString());
+                break;
+        }
+
+        resultTextView.setText(String.valueOf(result));
+        isOperatorClicked = true;
+/*        if (checker){
+            firstNumber = result;
+        }
+        checker = false;*/
+
+    }
+
+    private void onClearClick() {
+        resultTextView.setText("0");
+        firstNumber = 0;
+        secondNumber = 0;
+        operator = "";
+        isOperatorClicked = false;
+    }
+
+    private void onDotClick() {
+        String currentText = resultTextView.getText().toString();
+
+        // Перевіряємо, чи вже є десятковий роздільник у поточному числі
+        if (!currentText.contains(".")) {
+            resultTextView.append(".");
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Зберігаємо текст із TextView
+        String currentText = resultTextView.getText().toString();
+        outState.putString("RESULT_TEXT", currentText);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Відновлюємо текст у TextView
+        if (savedInstanceState != null) {
+            String restoredText = savedInstanceState.getString("RESULT_TEXT", "");
+            resultTextView.setText(restoredText);
+        }
+    }
+}
+
