@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/main"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:hint="Enter Name"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/editTextAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextName"
+        android:layout_marginTop="20dp"
+        android:hint="Enter Age"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_below="@id/editTextAge"
+        android:layout_marginTop="20dp" />
+
+<!--    <TextView
+        android:id="@+id/displayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your settings will appear here"
+        android:layout_below="@id/saveButton"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/saveToFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/displayText"
+        android:text="Save to File" />
+
+    <Button
+        android:id="@+id/loadFromFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saveToFileButton"
+        android:text="Load from File" />-->
+
+    <!-- Кнопка для завантаження списку користувачів -->
+    <Button
+        android:id="@+id/loadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Users"
+        android:layout_below="@id/saveButton"
+        android:layout_marginBottom="16dp"
+        android:layout_alignBaseline="@id/saveButton"
+        android:layout_toRightOf="@id/saveButton"/>
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Database"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@id/saveButton"
+        />
+    <!-- Список для відображення користувачів -->
+
+    <Button
+        android:id="@+id/writeFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write to File"
+        android:layout_below="@id/clearButton"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/readFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read from File"
+        android:layout_below="@id/writeFileButton"
+        android:layout_marginTop="16dp" />
+
+
+    <TextView
+        android:id="@+id/textViewFileContent"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/readFileButton"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="#f0f0f0"
+        android:text="File content will appear here." />
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFileContent"
+        />
+
+</RelativeLayout>
